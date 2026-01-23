@@ -22,5 +22,11 @@
     "@tailwindcss/postcss": "^4",
     "babel-plugin-react-compiler": "1.0.0",
     "tailwindcss": "^4"
+  },
+  "overrides": {
+    "flutterwave-react-v3": {
+      "react": "$react",
+      "react-dom": "$react-dom"
+    }
   }
 }
