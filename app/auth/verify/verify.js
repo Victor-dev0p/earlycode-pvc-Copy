@@ -1,12 +1,13 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Loader2, CheckCircle, XCircle } from 'lucide-react';
 import { db } from '@/lib/firebase';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 
-export default function VerifyClient() {
+// ✅ FIX: Separate component that uses useSearchParams
+function VerifyContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [status, setStatus] = useState('verifying');
@@ -113,5 +114,26 @@ export default function VerifyClient() {
         )}
       </div>
     </div>
+  );
+}
+
+// ✅ FIX: Wrap in Suspense boundary
+export default function VerifyClient() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-orange-50 flex items-center justify-center p-4">
+        <div className="bg-white rounded-3xl border-2 border-blue-100 p-8 max-w-md w-full text-center shadow-xl">
+          <div className="mb-6 flex justify-center">
+            <div className="bg-blue-100 p-6 rounded-full animate-pulse">
+              <Loader2 className="animate-spin text-blue-600" size={48} />
+            </div>
+          </div>
+          <h2 className="text-3xl font-bold text-gray-800 mb-4">Loading...</h2>
+          <p className="text-gray-600">Please wait</p>
+        </div>
+      </div>
+    }>
+      <VerifyContent />
+    </Suspense>
   );
 }
